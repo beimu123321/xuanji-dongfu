@@ -50,16 +50,8 @@ export function now(): string {
 /* ------------------------------------------------------------------ */
 
 function buildSeedDaily(): { date: string; count: number }[] {
-  const out: { date: string; count: number }[] = [];
-  const base = new Date();
-  // 固定伪随机序列，保证每次初始化结果一致（便于演示与截图）
-  const wave = [38, 52, 44, 61, 57, 72, 49, 66, 58, 81, 63, 55, 70, 47, 59, 74, 62, 88, 51, 67, 45, 73, 60, 56, 69, 64, 78, 53, 71, 65];
-  for (let i = 29; i >= 0; i -= 1) {
-    const d = new Date(base);
-    d.setDate(base.getDate() - i);
-    out.push({ date: dateKey(d), count: wave[(29 - i) % wave.length] });
-  }
-  return out;
+  // 真实起点：部署当日记为 0 访客，后续由 POST /api/stats/visit 真实累加
+  return [{ date: dateKey(), count: 0 }];
 }
 
 function buildSeed(): DatabaseShape {
@@ -136,7 +128,7 @@ function buildSeed(): DatabaseShape {
       cover_url: '',
       sort: 1,
       status: 1,
-      views: 1286,
+      views: 0,
       created_at: ts(120),
       updated_at: ts(3),
     },
@@ -151,7 +143,7 @@ function buildSeed(): DatabaseShape {
       cover_url: '',
       sort: 2,
       status: 1,
-      views: 743,
+      views: 0,
       created_at: ts(260),
       updated_at: ts(40),
     },
@@ -166,7 +158,7 @@ function buildSeed(): DatabaseShape {
       cover_url: '',
       sort: 3,
       status: 1,
-      views: 512,
+      views: 0,
       created_at: ts(300),
       updated_at: ts(60),
     },
@@ -181,7 +173,7 @@ function buildSeed(): DatabaseShape {
       cover_url: '',
       sort: 4,
       status: 1,
-      views: 388,
+      views: 0,
       created_at: ts(180),
       updated_at: ts(90),
     },
@@ -196,7 +188,7 @@ function buildSeed(): DatabaseShape {
       cover_url: '',
       sort: 5,
       status: 1,
-      views: 296,
+      views: 0,
       created_at: ts(340),
       updated_at: ts(150),
     },
@@ -211,7 +203,7 @@ function buildSeed(): DatabaseShape {
       cover_url: '',
       sort: 6,
       status: 1,
-      views: 205,
+      views: 0,
       created_at: ts(220),
       updated_at: ts(100),
     },
@@ -226,7 +218,7 @@ function buildSeed(): DatabaseShape {
       icon: 'mail',
       sort: 1,
       status: 1,
-      clicks: 132,
+      clicks: 0,
       created_at: t,
       updated_at: t,
     },
@@ -238,7 +230,7 @@ function buildSeed(): DatabaseShape {
       icon: 'github',
       sort: 2,
       status: 1,
-      clicks: 268,
+      clicks: 0,
       created_at: t,
       updated_at: t,
     },
@@ -250,7 +242,7 @@ function buildSeed(): DatabaseShape {
       icon: 'wechat',
       sort: 3,
       status: 1,
-      clicks: 96,
+      clicks: 0,
       created_at: t,
       updated_at: t,
     },
@@ -262,7 +254,7 @@ function buildSeed(): DatabaseShape {
       icon: 'link',
       sort: 4,
       status: 1,
-      clicks: 74,
+      clicks: 0,
       created_at: t,
       updated_at: t,
     },
@@ -293,12 +285,12 @@ function buildSeed(): DatabaseShape {
 
   const daily = buildSeedDaily();
   const stats: StatsRow = {
-    total: daily.reduce((sum, d) => sum + d.count, 0) + 4210,
-    today: daily[daily.length - 1].count,
+    total: 0,
+    today: 0,
     todayDate: daily[daily.length - 1].date,
     daily,
-    projectViews: projects.reduce((sum, p) => sum + p.views, 0),
-    contactClicks: contacts.reduce((sum, c) => sum + c.clicks, 0),
+    projectViews: 0,
+    contactClicks: 0,
   };
 
   const admin: AdminRow[] = [
@@ -355,11 +347,7 @@ function buildSeed(): DatabaseShape {
     settings,
     stats,
     loginLogs: [],
-    operations: [
-      { id: 1, action: '更新修为', target: '筑基档案', operator: adminUsername, created_at: ts(2) },
-      { id: 2, action: '新增丹器', target: '玄玑洞府', operator: adminUsername, created_at: ts(3) },
-      { id: 3, action: '调整排序', target: '丹器馆藏', operator: adminUsername, created_at: ts(5) },
-    ],
+    operations: [],
   };
 }
 
