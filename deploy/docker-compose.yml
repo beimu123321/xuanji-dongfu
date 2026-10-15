@@ -1,0 +1,53 @@
+# ============================================================
+# 玄玑洞府 · Docker Compose 编排
+# 用法：
+#   cd deploy && docker compose up -d --build
+# 说明：
+#   默认使用服务端内置的 JSON 文档存储，数据持久化在命名卷 xuanji-data 中。
+#   如需切换 MySQL，请取消 db 服务与下方 DATABASE_URL 的注释，并改造 store.ts。
+# ============================================================
+
+services:
+  server:
+    build:
+      context: ../server
+      dockerfile: Dockerfile
+    image: xuanji/server:1.0.0
+    container_name: xuanji-server
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: '3000'
+      JWT_SECRET: ${JWT_SECRET:-please-change-this-secret}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-change-me}
+      CORS_ORIGIN: ${CORS_ORIGIN:-*}
+    volumes:
+      - xuanji-data:/app/data
+      - xuanji-uploads:/app/uploads
+    ports:
+      - '3000:3000'
+    healthcheck:
+      test: ['CMD', 'node', '-e', "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: xuanji-nginx
+    restart: unless-stopped
+    depends_on:
+      - server
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ../home/dist:/var/www/xuanji-home:ro
+      - ../admin/dist:/var/www/xuanji-admin:ro
+    ports:
+      - '80:80'
+
+volumes:
+  xuanji-data:
+  xuanji-uploads:

@@ -1,0 +1,26 @@
+{
+  "name": "xuanji-dongfu",
+  "version": "1.0.0",
+  "private": true,
+  "description": "玄玑洞府 · 个人主页系统（3D 主页 + 管理后台 + 服务端）",
+  "scripts": {
+    "install:all": "pnpm install",
+    "dev": "concurrently -n server,home,admin -c green,cyan,magenta \"pnpm --filter @xuanji/server dev\" \"pnpm --filter @xuanji/home dev\" \"pnpm --filter @xuanji/admin dev\"",
+    "dev:server": "pnpm --filter @xuanji/server dev",
+    "dev:home": "pnpm --filter @xuanji/home dev",
+    "dev:admin": "pnpm --filter @xuanji/admin dev",
+    "build": "pnpm --filter @xuanji/home build && pnpm --filter @xuanji/admin build && pnpm --filter @xuanji/server build",
+    "build:home": "pnpm --filter @xuanji/home build",
+    "build:admin": "pnpm --filter @xuanji/admin build",
+    "build:server": "pnpm --filter @xuanji/server build",
+    "typecheck": "pnpm --filter @xuanji/server typecheck && pnpm --filter @xuanji/admin typecheck",
+    "start:server": "pnpm --filter @xuanji/server start"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "pnpm@9.15.9"
+}

@@ -1,0 +1,22 @@
+node_modules/
+dist/
+.DS_Store
+*.local
+*.log
+
+# 环境变量
+.env
+!.env.example
+
+# 运行时产物
+server/data/*.json
+server/data/*.tmp
+server/uploads/*
+!server/uploads/.gitkeep
+
+# 编辑器
+.vscode/
+.idea/
+
+# 构建产物
+*.tsbuildinfo

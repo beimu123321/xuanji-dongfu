@@ -1,0 +1,250 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* 国风水彩（青绿山水）：整体由墨玄夜色调翻亮，底色浅、文字深 */
+  --ink-bg: #eef5ec;
+  --ink-panel: rgba(239, 246, 236, 0.86);
+  --ink-border: rgba(22, 80, 74, 0.22);
+  --ink-gold: #8a6f32;
+  --ink-jade: #16504a;
+  --ink-stone: #4e7370;
+  --ink-shadow: rgba(22, 80, 74, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--ink-bg);
+  color: var(--ink-jade);
+  font-family: '霞鹜文楷', 'LXGW WenKai', '思源宋体', 'Noto Serif SC', serif;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+canvas {
+  display: block;
+  touch-action: none;
+}
+
+/* ---------------- 通用水墨构件 ---------------- */
+
+.ink-panel {
+  background: linear-gradient(160deg, rgba(251, 253, 246, 0.94) 0%, rgba(226, 239, 230, 0.92) 100%);
+  border: 1px solid var(--ink-border);
+  box-shadow:
+    0 18px 48px var(--ink-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.ink-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(138, 111, 50, 0.07), transparent 42%),
+    radial-gradient(circle at 88% 100%, rgba(76, 138, 99, 0.08), transparent 46%);
+}
+
+.gold-frame {
+  position: relative;
+}
+.gold-frame::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(138, 111, 50, 0.24);
+  pointer-events: none;
+}
+
+.text-gold-glow {
+  /* 浅底上的金字：保留一丝晕光即可，过强的发光会让纸面发灰 */
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.9), 0 0 12px rgba(138, 111, 50, 0.22);
+}
+
+/* 卷轴 / 玉简质感 */
+.scroll-silk {
+  background:
+    repeating-linear-gradient(90deg, rgba(22, 80, 74, 0.035) 0 1px, transparent 1px 4px),
+    linear-gradient(180deg, rgba(251, 253, 246, 0.85), rgba(226, 239, 230, 0.8));
+}
+
+/* 细滚动条 */
+.thin-scroll::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+.thin-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.thin-scroll::-webkit-scrollbar-thumb {
+  background: rgba(138, 111, 50, 0.38);
+  border-radius: 4px;
+}
+.thin-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(138, 111, 50, 0.6);
+}
+.thin-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(138, 111, 50, 0.38) transparent;
+}
+
+/* 按钮：赭金描边 */
+.btn-gold {
+  position: relative;
+  padding: 0.65rem 1.9rem;
+  border: 1px solid rgba(138, 111, 50, 0.5);
+  color: var(--ink-gold);
+  letter-spacing: 0.28em;
+  background: linear-gradient(180deg, rgba(138, 111, 50, 0.1), rgba(138, 111, 50, 0.02));
+  transition: all 0.35s ease;
+  cursor: pointer;
+}
+.btn-gold:hover:not(:disabled) {
+  color: #fbfdf6;
+  background: linear-gradient(180deg, #d3b878, #b0904f);
+  box-shadow: 0 0 26px rgba(138, 111, 50, 0.35);
+}
+.btn-gold:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  border-color: rgba(78, 115, 112, 0.35);
+  color: var(--ink-stone);
+  background: transparent;
+}
+
+.btn-ghost {
+  border: 1px solid rgba(78, 115, 112, 0.35);
+  color: var(--ink-stone);
+  background: rgba(255, 253, 246, 0.55);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.btn-ghost:hover {
+  border-color: rgba(138, 111, 50, 0.5);
+  color: var(--ink-gold);
+}
+.btn-ghost.active {
+  border-color: rgba(138, 111, 50, 0.75);
+  color: var(--ink-gold);
+  background: rgba(138, 111, 50, 0.12);
+}
+
+/* Markdown 渲染样式 */
+.md-body {
+  font-size: 14px;
+  line-height: 1.95;
+  color: #2e6e64;
+}
+.md-body h1,
+.md-body h2,
+.md-body h3 {
+  color: var(--ink-gold);
+  font-weight: 600;
+  margin: 1.1em 0 0.5em;
+  letter-spacing: 0.06em;
+}
+.md-body h1 {
+  font-size: 19px;
+}
+.md-body h2 {
+  font-size: 17px;
+}
+.md-body h3 {
+  font-size: 15px;
+}
+.md-body p {
+  margin: 0.55em 0;
+}
+.md-body ul,
+.md-body ol {
+  margin: 0.5em 0 0.5em 1.25em;
+  padding: 0;
+}
+.md-body li {
+  margin: 0.28em 0;
+  list-style: disc;
+}
+.md-body ol li {
+  list-style: decimal;
+}
+.md-body strong {
+  color: var(--ink-gold);
+  font-weight: 600;
+}
+.md-body em {
+  color: #4c8a63;
+  font-style: normal;
+}
+.md-body code {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-size: 12.5px;
+  background: rgba(22, 80, 74, 0.06);
+  border: 1px solid rgba(138, 111, 50, 0.18);
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: #7a5e22;
+}
+.md-body pre {
+  background: rgba(22, 80, 74, 0.05);
+  border: 1px solid rgba(138, 111, 50, 0.2);
+  border-radius: 4px;
+  padding: 12px 14px;
+  overflow-x: auto;
+  margin: 0.7em 0;
+}
+.md-body pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #16504a;
+}
+.md-body a {
+  color: var(--ink-gold);
+  border-bottom: 1px dashed rgba(201, 169, 97, 0.5);
+  text-decoration: none;
+}
+.md-body blockquote {
+  border-left: 2px solid rgba(201, 169, 97, 0.5);
+  padding-left: 12px;
+  color: var(--ink-stone);
+  margin: 0.7em 0;
+}
+.md-body hr {
+  border: none;
+  border-top: 1px solid rgba(201, 169, 97, 0.2);
+  margin: 1em 0;
+}
+.md-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.7em 0;
+  font-size: 13px;
+}
+.md-body th,
+.md-body td {
+  border: 1px solid rgba(138, 111, 50, 0.22);
+  padding: 6px 9px;
+  text-align: left;
+}
+.md-body th {
+  background: rgba(22, 80, 74, 0.06);
+  color: var(--ink-gold);
+}
+
+/* 宽窄屏的显示切换（御剑归宗 / 底部导航）由 useViewportTier 统一判定，
+   不再依赖媒体查询——3D 玉简环与底部导航必须严格互斥，否则前厅会没有入口。 */
